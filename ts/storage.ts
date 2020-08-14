@@ -71,6 +71,33 @@ class BinStorage{
         })[0];
     }
 
+    deleteById(id){
+        let allData = this.getAll();
+        allData =  allData.filter(row => {
+            return row.id != id;
+        });
+
+        console.log(allData);
+
+        let database = this.getDatabase(this.activeDataBase);
+
+        for (let i in database._tables){
+            if(database._tables[i].tableName == this.activeTable){
+                database._tables[i].data = allData;
+            }
+        }
+
+
+        for (let i in this.databases){
+            if(this.databases[i]._metaData.name == database._metaData.name){
+                this.databases[i] = database;
+            }
+        }
+
+        return this.flush();
+
+    }
+
     getAll(){
         let database = this.getDatabase(this.activeDataBase);
 
@@ -148,6 +175,7 @@ class BinStorage{
 
      flush(){
         localStorage.setItem(this.KEY,this._stringify(this.databases));
+        return this;
     }
 
 
