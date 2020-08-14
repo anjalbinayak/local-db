@@ -4,12 +4,14 @@ class BinStorage{
     databases : Array<Database>;
     KEY : string;
     activeDataBase: string;
+    activeTable :string;
 
 
        constructor(){
         this.databases = this.getDatabases();
         this.KEY = "BIN_LOCAL_DB_V3";
         this.activeDataBase = null;
+        this.activeTable = null;
     }
 
      _stringify(obj){
@@ -50,8 +52,33 @@ class BinStorage{
     }
 
     useDb(dbName){
+        if(!this.databaseExists(dbName)) throw new Error("Database doesnot exists");
         this.activeDataBase = dbName;
         return this;
+    }
+
+
+    useTable(tableName){
+        if(!this.tableExists(tableName,this.activeDataBase)) throw new Error("Table doesnot exists");
+        this.activeTable = tableName;
+        return  this;
+    }
+
+    getById(Id){
+        let allData = this.getAll();
+        return allData.filter(row => {
+            return row.id == Id;
+        })[0];
+    }
+
+    getAll(){
+        let database = this.getDatabase(this.activeDataBase);
+
+        for (let i in database._tables){
+            if(database._tables[i].tableName == this.activeTable){
+                return database._tables[i].data;
+            }
+        }
     }
     
      createDatabase = (dbName) =>{

@@ -3,8 +3,10 @@ class Table{
     tableName: string;
     _metaData: {dbName};
     data: Array<Object>;
+
     constructor(tableName, dbName){
         this.tableName = tableName;
+        
 
         this._metaData = {
             dbName
@@ -27,6 +29,12 @@ class Table{
         object.id = Id();
         this.data.push(object);
 
+    }
+
+    getById(id){
+        this.data.filter( row =>{
+            return row.id == id;
+        })[0];
     }
 
     
