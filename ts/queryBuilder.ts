@@ -1,0 +1,2 @@
+import {BinStorage} from './storage';
+

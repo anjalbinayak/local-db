@@ -159,16 +159,6 @@ export {BinStorage};
 
 
 
-// add window storage event to refresh db dynamically
-// databases [
-//     database1{
-//         _metaData , _tables[
-//             table1{
-//                 _metaData , _data : []
-//             }
-//         ]
-//     }
-// ]
 
 
 
