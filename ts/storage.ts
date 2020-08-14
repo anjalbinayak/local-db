@@ -80,6 +80,12 @@ class BinStorage{
             }
         }
     }
+
+
+    createDatabaseIfDoesnotExists(dbName){
+        if(this.databaseExists(dbName)) return;
+        return this.createDatabase(dbName);
+    }
     
      createDatabase = (dbName) =>{
         if(this.databaseExists(dbName)) {
@@ -90,7 +96,9 @@ class BinStorage{
     }
 
 
-     createTable = (tableName,dbName) => {
+     createTable = (tableName,dbName = null) => {
+         if(this.activeDataBase) dbName = this.activeDataBase;
+         if(!this.activeDataBase && !dbName) throw new Error("Either Provide Db Name or use `useDb` function");
          if(!this.databaseExists(dbName)){
              throw new Error(`Database with name ${dbName} doesnotexists`);
          }
