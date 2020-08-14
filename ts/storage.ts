@@ -5,6 +5,7 @@ class BinStorage{
     KEY : string;
     activeDataBase: string;
     activeTable :string;
+    defaultDatabase: string;
 
 
        constructor(){
@@ -12,6 +13,8 @@ class BinStorage{
         this.KEY = "BIN_LOCAL_DB_V3";
         this.activeDataBase = null;
         this.activeTable = null;
+        this.defaultDatabase = "_default_db";
+        this.createDatabaseIfDoesnotExists(this.defaultDatabase);
     }
 
      _stringify(obj){
@@ -55,6 +58,10 @@ class BinStorage{
         if(!this.databaseExists(dbName)) throw new Error("Database doesnot exists");
         this.activeDataBase = dbName;
         return this;
+    }
+
+    useDefaultDb(){
+        return this.useDb(this.defaultDatabase);
     }
 
 
@@ -111,7 +118,9 @@ class BinStorage{
 
     createDatabaseIfDoesnotExists(dbName){
         if(this.databaseExists(dbName)) return;
+        console.log("THis dathase is ");
         return this.createDatabase(dbName);
+        
     }
     
      createDatabase = (dbName) =>{
@@ -119,7 +128,7 @@ class BinStorage{
             throw new Error(`Database with name ${dbName} already exist`);
         }
         this.databases.push(new Database(dbName));
-        return this;     
+        return this.flush();     
     }
 
 
