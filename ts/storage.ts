@@ -81,6 +81,30 @@ class BinStorage{
         return {};
     }
 
+    insertData(object,tableName,dbName){
+        if(!this.tableExists(tableName,dbName)){
+            throw new Error(`Table with name ${tableName} doesnot exists`);
+        }
+        let database = this.getDatabase(dbName);
+
+        for (let i in database._tables){
+            if(database._tables[i].tableName == tableName){
+                database._tables[i].insert(object);
+            }
+        }
+
+
+        for (let i in this.databases){
+            if(this.databases[i]._metaData.name == database._metaData.name){
+                this.databases[i] = database;
+            }
+        }
+
+        return this;
+        
+
+    }
+
 
      flush(){
         localStorage.setItem(this.KEY,this._stringify(this.databases));
