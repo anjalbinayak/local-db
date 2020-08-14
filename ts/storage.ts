@@ -3,11 +3,13 @@ import {Database} from './db';
 class BinStorage{
     databases : Array<Database>;
     KEY : string;
+    activeDataBase: string;
 
 
        constructor(){
         this.databases = this.getDatabases();
         this.KEY = "BIN_LOCAL_DB_V3";
+        this.activeDataBase = null;
     }
 
      _stringify(obj){
@@ -30,7 +32,6 @@ class BinStorage{
 
      getDatabase(dbName){
         return this.databases.filter(db => db._metaData.name == dbName)[0];
-
     }
 
     databaseExists(dbName){
@@ -47,10 +48,13 @@ class BinStorage{
         console.log(tableWithSameName);
         return tableWithSameName.length != 0;
     }
+
+    useDb(dbName){
+        this.activeDataBase = dbName;
+        return this;
+    }
     
      createDatabase = (dbName) =>{
-         console.log(this.databases);
-        console.log(this.getDatabase(dbName));
         if(this.databaseExists(dbName)) {
             throw new Error(`Database with name ${dbName} already exist`);
         }
@@ -81,11 +85,12 @@ class BinStorage{
         return {};
     }
 
-    insertData(object,tableName,dbName){
-        if(!this.tableExists(tableName,dbName)){
+    insertData(object,tableName){
+        if(!this.activeDataBase) throw new Error("Use a database before inserting data");
+        if(!this.tableExists(tableName,this.activeDataBase)){
             throw new Error(`Table with name ${tableName} doesnot exists`);
         }
-        let database = this.getDatabase(dbName);
+        let database = this.getDatabase(this.activeDataBase);
 
         for (let i in database._tables){
             if(database._tables[i].tableName == tableName){

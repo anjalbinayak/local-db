@@ -1,4 +1,4 @@
-
+import {Id} from './id';
 class Table{
     tableName: string;
     _metaData: {dbName};
@@ -24,6 +24,7 @@ class Table{
     }
 
     insert(object){
+        object.id = Id();
         this.data.push(object);
 
     }
