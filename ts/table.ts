@@ -1,4 +1,3 @@
-const uuidv4 = require('uuid/v4');
 
 class Table{
     tableName: string;
@@ -25,7 +24,6 @@ class Table{
     }
 
     insert(object){
-        object.id = uuidv4();
         this.data.push(object);
 
     }
